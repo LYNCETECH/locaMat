@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const User = require('./models/users');
 
-const materielTemplate = mongoose.Schema({
+const materialTemplate = mongoose.Schema({
   nom: { type: String, required: true },
   version: { type: String, required: true },
   ref: { type: String, required: true },
@@ -12,4 +12,7 @@ const materielTemplate = mongoose.Schema({
   emprunteur: { type: User, required: false },
 });
 
-module.exports = mongoose.model('materiel', materielTemplate);
+module.exports = mongoose.model('material', materialTemplate);
+
+
+
