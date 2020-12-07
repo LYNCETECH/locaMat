@@ -22,6 +22,7 @@ app.use((req, res, next) => {
 });
 
 var users = require('./routes/users');
+var auth = require('./routes/auth');
 var materials = require('./routes/materials');
 var booking = require('./routes/booking');
 
@@ -30,6 +31,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+app.use('/api/v1/auth', auth);
 app.use('/api/v1/users', users);
 app.use('/api/v1/materials', materials);
 app.use('/api/v1/booking', materials);
