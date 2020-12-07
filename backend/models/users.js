@@ -1,9 +1,14 @@
-var express = require('express');
-var router = express.Router();
+const mongoose = require('mongoose');
+const uniqueValidator = require('mongoose-unique-validator');
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.json({users: [{name: 'Timmy'}]});
+const userSchema = mongoose.Schema({
+	nom: { type: String, required: true, unique: false },
+	prenom: { type: String, required: true, unique: false },
+    email: { type: String, required: true, unique: true },
+    role : { type: String, required: true, unique: false },
+  	password: { type: String, required: true }
 });
 
-module.exports = router;
+userSchema.plugin(uniqueValidator);
+
+module.exports = mongoose.model('User', userSchema);
