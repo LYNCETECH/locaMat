@@ -1,11 +1,11 @@
-
-var express = require('express');
+const express = require('express');
+const app = express();
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb+srv://locamat:<polytech>@cluster0-pme76.mongodb.net/test?retryWrites=true')
+mongoose.connect('mongodb+srv://locamat:polytech@cluster0.k6vpz.mongodb.net/test?retryWrites=true&w=majority&authSource=admin', {useNewUrlParser: true,useUnifiedTopology: true})
   .then(() => {
     console.log('Successfully connected to MongoDB Atlas!');
   })
@@ -25,7 +25,6 @@ var users = require('./routes/users');
 var materials = require('./routes/materials');
 var booking = require('./routes/booking');
 
-var app = express();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -33,6 +32,6 @@ app.use(cookieParser());
 
 app.use('/api/v1/users', users);
 app.use('/api/v1/materials', materials);
-ap.use('/api/v1/booking', materials);
+app.use('/api/v1/booking', materials);
 
 module.exports = app;
