@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const User = require('./models/users');
+//const User = require('./models/users');
 
 const materialTemplate = mongoose.Schema({
   nom: { type: String, required: true },
@@ -9,8 +9,10 @@ const materialTemplate = mongoose.Schema({
   imageUrl: { type: String, required: false },
   dateDepart: { type: Date, required: false },
   dateRetour: { type: Date, required: false },
-  emprunteur: { type: User, required: false },
+  //emprunteur: { type: User, required: false },
 });
+
+
 
 module.exports = mongoose.model('material', materialTemplate);
 
