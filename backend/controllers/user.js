@@ -1,5 +1,5 @@
 const User = require('../models/users');
-
+const bcrypt = require('bcrypt');
 
 
 exports.login = (req, res, next) => {
@@ -65,6 +65,7 @@ exports.modifyUser = (req, res, next) => {
     nom: req.body.nom,
     prenom: req.body.prenom,
     email: req.body.email,
+    role: req.body.role,
     password: req.body.password
   });
   User.updateOne({_id: req.params.id}, user).then(
@@ -117,11 +118,14 @@ exports.signup = (req, res, next) => {
   bcrypt.hash(req.body.password, 10)
     .then(hash => {
       const user = new User({
+        nom: req.body.nom,
+        prenom: req.body.prenom,
         email: req.body.email,
+        role: req.body.role,
         password: hash
       });
       user.save()
-        .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
+        .then(() => res.status(201).json({ message: 'User created successfully' }))
         .catch(error => res.status(400).json({ error }));
     })
     .catch(error => res.status(500).json({ error }));
