@@ -52,7 +52,7 @@ const userData1 = {
 const userData2 = {
       "nom": "Test1",
       "prenom":"prenom",
-      "email":"mail@gmail.com",
+      "email":"mail8@gmail.com",
       "password":"polytech"
   }
 
@@ -166,33 +166,38 @@ describe('User Model Test', () => {
 describe('User requests Test', () => {
 
     it('Should signup with no existing user', async () => {
-        await request(app)
+        const res=await request(app)
           .post('/api/v1/auth/signup')
-          .send(userData4)
-          .expect(201);
+          .send(userData4);
+        expect(res.statusCode).toEqual(201);
     });
 
     it('Should NOT signup with existing user', async () => {
-        await request(app)
+        const res=await request(app)
           .post('/api/v1/auth/signup')
-          .send(userData)
-          .expect(401);
+          .send(userData);
+        expect(res.statusCode).toEqual(401);
+        expect(res.body.error.errors.email.kind).toContain("unique");
     });
 
     // It should us told us the errors in on role field.
     it('Should NOT signup without required field', async () => {
-        await request(app)
+        const res=await request(app)
           .post('/api/v1/auth/signup')
           .send(userData2)
-          .expect(401);
+          expect(res.statusCode).toEqual(401);
+          expect(res.body.error.errors.role.kind).toContain("required");
     });
 
     // It should us told us the errors in on email field.
     it('Should NOT signup with invalid email', async () => {
-        await request(app)
+        const res=await request(app)
           .post('/api/v1/auth/signup')
-          .send(userData3)
-          .expect(401);
+          .send(userData3);
+
+          expect(res.statusCode).toEqual(401);
+          expect(res.body.error.errors.email.message).toContain("Invalid email");
+          
     });
 
     
