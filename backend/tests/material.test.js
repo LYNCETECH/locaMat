@@ -165,46 +165,40 @@ describe('Material Model Test', () => {
     
 })
 
-/*
+
 describe('User requests Test', () => {
 
-    it('Should signup with no existing user', async () => {
+    it('Should add a material', async () => {
         const res=await request(app)
-          .post('/api/v1/auth/signup')
-          .send(userData4);
+          .post('/api/v1/materials')
+          .send(materialData4);
         expect(res.statusCode).toEqual(201);
     });
 
-    it('Should NOT signup with existing user', async () => {
-        const res=await request(app)
-          .post('/api/v1/auth/signup')
-          .send(userData);
-        expect(res.statusCode).toEqual(401);
-        expect(res.body.error.errors.email.kind).toContain("unique");
-    });
 
     // It should us told us the errors in on role field.
-    it('Should NOT signup without required field', async () => {
+    it('Should NOT create without required field', async () => {
         const res=await request(app)
-          .post('/api/v1/auth/signup')
-          .send(userData2)
+          .post('/api/v1/materials')
+          .send(materialData2)
           expect(res.statusCode).toEqual(401);
           expect(res.body.error.errors.role.kind).toContain("required");
     });
 
-    // It should us told us the errors in on email field.
-    it('Should NOT signup with invalid email', async () => {
+    /*
+    // It should us told us the errors in date format field.
+    it('Should NOT signup with invalid date format', async () => {
         const res=await request(app)
-          .post('/api/v1/auth/signup')
-          .send(userData3);
+          .post('/api/v1/materials')
+          .send(materialData3);
 
           expect(res.statusCode).toEqual(401);
           expect(res.body.error.errors.email.message).toContain("Invalid email");
           
-    });
+    });*/
 
     
-})*/
+})
 
  
 
