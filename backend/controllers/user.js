@@ -1,26 +1,27 @@
 const User = require('../models/users');
 const bcrypt = require('bcrypt');
-
+const jwt = require('jsonwebtoken');
 
 exports.login = (req, res, next) => {
   User.findOne({ email: req.body.email }).then(
     (user) => {
       if (!user) {
-        return res.status(401).json({
-          error: new Error('User not found!')
-        });
+        return res.status(401).json({type:new Error('User not found!'),message:"Utilisateur inconnu, vérifiez votre adresse mail et réessayer"}
+        );
       }
+      
       bcrypt.compare(req.body.password, user.password).then(
         (valid) => {
+         
           if (!valid) {
-            return res.status(401).json({
-              error: new Error('Incorrect password!')
+            return res.status(401).json({type:new Error('Incorrect password!'),message:"Mot de passe incorrect, vérifiez votre mot de passe et réessayer"
             });
           }
+
           const token = jwt.sign(
             { userId: user._id },
-            'RANDOM_TOKEN_SECRET',
-            { expiresIn: '24h' });
+            'RANDOM_TOKEN_SECRET',{ expiresIn: '24h' });
+           
           res.status(200).json({
             userId: user._id,
             token: token
@@ -47,8 +48,9 @@ exports.getOneUser = (req, res, next) => {
   User.findOne({
     _id: req.params.id
   }).then(
-    (thing) => {
-      res.status(200).json(User);
+    (user) => {
+      
+      res.status(200).json(user);
     }
   ).catch(
     (error) => {
@@ -60,27 +62,57 @@ exports.getOneUser = (req, res, next) => {
 };
 
 exports.modifyUser = (req, res, next) => {
-  const user = new User({
-    _id: req.params.id,
-    nom: req.body.nom,
-    prenom: req.body.prenom,
-    email: req.body.email,
-    role: req.body.role,
-    password: req.body.password
-  });
-  User.updateOne({_id: req.params.id}, user).then(
-    () => {
-      res.status(201).json({
-        message: 'User updated successfully!'
-      });
+  let hashpass;
+  User.findOne({
+    _id: req.params.id
+  }).then(
+    (user) => {
+       
+      if(user.password!==req.body.password)
+      {
+        
+          bcrypt.hash(req.body.password, 10)
+          .then(hash => {
+            
+              hashpass=hash;
+          })
+          .catch(error => res.status(500).json({ error }));
+      }else{
+        
+        hashpass=req.body.password;
+      }
+      
     }
   ).catch(
     (error) => {
-      res.status(400).json({
+      res.status(404).json({
         error: error
       });
     }
   );
+
+  const user = new User({
+        _id: req.params.id,
+        nom: req.body.nom,
+        prenom: req.body.prenom,
+        email: req.body.email,
+        role: req.body.role,
+        password: hashpass
+      });
+      User.updateOne({_id: req.params.id}, user).then(
+        () => {
+          res.status(201).json({
+            message: 'User updated successfully!'
+          });
+        }
+      ).catch(
+        (error) => {
+          res.status(400).json({
+            error: error
+          });
+        }
+      );
+  
 };
 
 exports.deleteUser = (req, res, next) => {
@@ -128,8 +160,14 @@ exports.signup = (req, res, next) => {
         .then(() => res.status(201).json({ message: 'User created successfully' }))
         .catch(
           (error) => {
-               
-                res.status(401).json({error:error});
+            
+            if(error.errors.email.kind=='user defined')
+            {
+              error.message="Un utilisateur avec cet email existe déjà";
+            }
+
+
+            res.status(401).json({error});
             
             
         });

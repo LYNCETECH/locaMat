@@ -163,7 +163,7 @@ describe('User Model Test', () => {
 })
 
 
-describe('User requests Test', () => {
+describe('Add user Test', () => {
 
     it('Should signup with no existing user', async () => {
         const res=await request(app)
@@ -177,7 +177,7 @@ describe('User requests Test', () => {
           .post('/api/v1/auth/signup')
           .send(userData);
         expect(res.statusCode).toEqual(401);
-        expect(res.body.error.errors.email.kind).toContain("unique");
+        expect(res.body.error.errors.email.kind).toContain("user defined");
     });
 
     // It should us told us the errors in on role field.

@@ -90,6 +90,7 @@ exports.deleteMaterial = (req, res, next) => {
 exports.getAllStuff = (req, res, next) => {
   Material.find().then(
     (materials) => {
+      
       res.status(200).json(materials);
     }
   ).catch(
