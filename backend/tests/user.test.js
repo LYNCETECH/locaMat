@@ -177,7 +177,7 @@ describe('Add user Test', () => {
           .post('/api/v1/auth/signup')
           .send(userData);
         expect(res.statusCode).toEqual(401);
-        expect(res.body.error.errors.email.kind).toContain("user defined");
+        expect(res.body.error.errors.kind).toContain("unique");
     });
 
     // It should us told us the errors in on role field.
@@ -186,7 +186,7 @@ describe('Add user Test', () => {
           .post('/api/v1/auth/signup')
           .send(userData2)
           expect(res.statusCode).toEqual(401);
-          expect(res.body.error.errors.role.kind).toContain("required");
+          expect(res.body.error.errors.kind).toContain("required");
     });
 
     // It should us told us the errors in on email field.

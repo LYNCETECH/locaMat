@@ -161,7 +161,7 @@ exports.signup = (req, res, next) => {
         .catch(
           (error) => {
             
-            if(error.errors.email.kind=='user defined')
+            if(error.errors.kind=='unique')
             {
               error.message="Un utilisateur avec cet email existe déjà";
             }
